@@ -11,52 +11,43 @@ const camera = new THREE.PerspectiveCamera(
 
 camera.position.z = 5;
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+const ambientLight = new THREE.AmbientLight("#fff", 0.5);
 
-const texture = new THREE.TextureLoader().load('assets/gettyimages-491578178-612x612.jpg')
-const textureMaterial = new THREE.MeshBasicMaterial({map: texture})
+const dirLight = new THREE.DirectionalLight("#fff", 1);
+dirLight.position.set(5, 5, 5);
+
+// const pointLight = new THREE.PointLight("#fff", 10, 100);
+// pointLight.position.set(0.5, 1, 1);
+
+// const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.5);
+
+// const texture = new THREE.TextureLoader().load('assets/gettyimages-491578178-612x612.jpg')
+// const textureMaterial = new THREE.MeshBasicMaterial({map: texture})
+
+// const spotLight = new THREE.SpotLight('#fff', 3)
+// spotLight.position.set(1,1,1)
 
 const geometry = new THREE.BoxGeometry();
-// const material = new THREE.MeshBasicMaterial({ color: "red" });
-const cube = new THREE.Mesh(geometry, textureMaterial);
+const material = new THREE.MeshStandardMaterial({ color: "#fff" });
+const cube = new THREE.Mesh(geometry, material);
+cube.position.set(0, 0, 0);
 
-cube.position.set(-3, 0, 0);
 scene.add(cube);
+// scene.add(spotLight);
+// scene.add(pointLight);
+// scene.add(pointLightHelper);
+scene.add(dirLight);
+scene.add(ambientLight);
 
-const sphereGeometry = new THREE.SphereGeometry(0.5, 50, 50);
-const sphereMaterial = new THREE.MeshPhongMaterial({
-  color: "blue",
-  emissive: "#fff",
-  shininess: 100,
-});
-
-const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-sphere.position.set(2, 0, 0);
-scene.add(sphere);
-
-const torus = new THREE.Mesh(
-  new THREE.TorusGeometry(0.7, 0.2, 16, 100),
-  new THREE.MeshBasicMaterial({ color: "blue" })
-);
-torus.position.set(2, 2, 1);
-scene.add(torus);
-
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), textureMaterial);
-plane.position.set(-2,2,0)
-scene.add(plane)
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 function animate() {
   requestAnimationFrame(animate);
 
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
-
-  sphere.rotation.x += 0.01;
-  sphere.rotation.y += 0.01;
-
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.01;
+  cube.rotation.z += 0.01;
 
   renderer.render(scene, camera);
 }
