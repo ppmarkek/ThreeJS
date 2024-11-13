@@ -14,9 +14,12 @@ camera.position.z = 5;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+const texture = new THREE.TextureLoader().load('assets/gettyimages-491578178-612x612.jpg')
+const textureMaterial = new THREE.MeshBasicMaterial({map: texture})
+
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: "red" });
-const cube = new THREE.Mesh(geometry, material);
+// const material = new THREE.MeshBasicMaterial({ color: "red" });
+const cube = new THREE.Mesh(geometry, textureMaterial);
 
 cube.position.set(-3, 0, 0);
 scene.add(cube);
@@ -37,7 +40,11 @@ const torus = new THREE.Mesh(
   new THREE.MeshBasicMaterial({ color: "blue" })
 );
 torus.position.set(2, 2, 1);
-scene.add(torus)
+scene.add(torus);
+
+const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), textureMaterial);
+plane.position.set(-2,2,0)
+scene.add(plane)
 
 function animate() {
   requestAnimationFrame(animate);
