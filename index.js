@@ -1,5 +1,9 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer();
@@ -19,7 +23,7 @@ controls.screenSpacePanning = false;
 controls.minDistance = 2;
 controls.maxDistance = 10;
 
-const ambientLight = new THREE.AmbientLight("#fff", 0.5);
+const ambientLight = new THREE.AmbientLight("#fff", 10);
 
 const dirLight = new THREE.DirectionalLight("#fff", 1);
 dirLight.position.set(5, 5, 5);
@@ -35,12 +39,29 @@ const sphere = new THREE.Mesh(
 );
 sphere.position.x = 2;
 
+const loader = new GLTFLoader();
+loader.load(
+  "./models/police_car/scene.gltf",
+  (gltf) => {
+    const model = gltf.scene;
+    model.scale.set(1, 1, 1);
+    model.position.set(1, 1, 1);
+    scene.add(model);
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (err) => {
+    console.error("Error loading model:", err);
+  }
+);
+
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-scene.add(cube);
-scene.add(sphere);
-scene.add(dirLight);
+// scene.add(cube);
+// scene.add(sphere);
+// scene.add(dirLight);
 scene.add(ambientLight);
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -104,6 +125,7 @@ const animate = () => {
   }
 
   controls.update();
+  renderer.setClearColor("#fff");
   renderer.render(scene, camera);
 };
 
